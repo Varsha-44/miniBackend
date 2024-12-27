@@ -8,6 +8,7 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
+app.use(serveStatic(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
 connectDB();
