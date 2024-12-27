@@ -29,8 +29,10 @@ app.use('/api/interviews', require('./routes/Interview')); // Interview feedback
 app.use('/api/exams', require('./routes/Exam')); // Interview feedback routes
 app.use('/api/pts', require('./routes/PT'));
 // Default route for root
+ 
+
 app.get('/', (req, res) => {
-  res.send('Welcome to Campus Harmony API');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start the server
