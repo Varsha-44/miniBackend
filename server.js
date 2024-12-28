@@ -4,36 +4,37 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Initialize dotenv to use environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin:"https://minifrontend.vercel.app",
-  credentials: true
-}));
-app.use(express.json()); // Parse incoming JSON requests
+// CORS Middleware Configuration
+const corsOptions = {
+  origin: "https://minifrontend.vercel.app",  // Allow frontend origin
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  // Allow specific methods
+  allowedHeaders: ["Content-Type", "Authorization"],  // Allow specific headers
+  credentials: true,  // If you're using cookies or other credentials
+};
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors(corsOptions)); // Enable CORS with the above options
+
+// Other middlewares
+app.use(express.json());  // Parse incoming JSON requests
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 // Connect to MongoDB
 connectDB();
-console.log(__dirname); // Make sure the path is correct for the public directory
 
-// Routes
-app.use('/api', require('./routes/auth')); // Authentication routes for login and registration
-app.use('/api/opportunity', require('./routes/opportunity')); // Opportunity routes for adding and viewing opportunities
-app.use('/api/complaints', require('./routes/Complaint')); // Complaints routes
-app.use('/api/interviews', require('./routes/Interview')); // Interview feedback routes
-app.use('/api/exams', require('./routes/Exam')); // Interview feedback routes
+// API Routes
+app.use('/api', require('./routes/auth'));
+app.use('/api/opportunity', require('./routes/opportunity'));
+app.use('/api/complaints', require('./routes/Complaint'));
+app.use('/api/interviews', require('./routes/Interview'));
+app.use('/api/exams', require('./routes/Exam'));
 app.use('/api/pts', require('./routes/PT'));
 
-// Default route for root (serving index.html)
-app.get('/', (req, res) => {
+// Catch-all route for frontend (for single-page apps)
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
