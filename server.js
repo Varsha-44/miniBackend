@@ -11,7 +11,10 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(cors({
+  origin:"https://minifrontend.vercel.app",
+  credentials: true
+}));
 app.use(express.json()); // Parse incoming JSON requests
 
 // Serve static files from the 'public' directory
